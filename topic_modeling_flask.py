@@ -67,12 +67,13 @@ for k, v in dictionary.iteritems():
         break
 dictionary.filter_extremes(no_below=15, no_above=0.5, keep_n=100000)
 
-myJson = "{" + "\"game\": [" + "{" + \
-    "\"topic1\" :" + "\"" + myLis[0] + "\"" + "," + \
-    "\"topic2\": " + "\"" + myLis[1] + "\"" + "," + \
-    "\"topic3\": " + "\"" + myLis[2] + "\"" + "," + \
-    "\"topic4\": " + "\"" + myLis[3] + "\"" + \
-    "}" + "]" + "} "
+myJson = "{" + "\"Game\": [" + "{"
+for i in range(1, 11):
+    if i == 10:
+        myJson += f"\"topic{i}\" :" + "\"" + myLis[i] + "\""
+    else:
+        myJson += f"\"topic{i}\" :" + "\"" + myLis[i] + "\"" + ","
+myJson += "}" + "]" + "} "
 
 bow_corpus = [dictionary.doc2bow(doc) for doc in processed_docs]
 bow_corpus[4310]
@@ -81,15 +82,11 @@ for i in range(len(bow_doc_4310)):
     print("Word {} (\"{}\") appears {} time.".format(bow_doc_4310[i][0], dictionary[bow_doc_4310[i][0]],
                                                      bow_doc_4310[i][1]))
 
-
-
 from flask import Flask
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-
-from flask import Flask, redirect, url_for
-
-app = Flask(__name__)
+CORS(app)
 
 
 @app.route('/game')
