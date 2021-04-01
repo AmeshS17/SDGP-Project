@@ -19,8 +19,8 @@ def get_game(id, table):
 
 def get_game_list(table):
     scan_kwargs = {
-        'ProjectionExpression': "id, title, #descrip",
-        'ExpressionAttributeNames': {"#descrip": "desc"}
+        'ProjectionExpression': "id, title, #description",
+        'ExpressionAttributeNames': {"#description": "desc"}
     }
 
     games_list = []
