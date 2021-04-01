@@ -46,7 +46,7 @@ def lambda_handler(event, context):
         if 'title' in response:
             return {
                 'statusCode': 200,
-                'body': json.dumps('Requested game found: ' + response['title'])
+                'body': json.dumps(response)
             }
         else:
             return {
