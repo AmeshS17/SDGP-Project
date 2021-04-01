@@ -45,7 +45,8 @@ def lambda_handler(event, context):
         
         if 'title' in response:
             game_id = int(response['id'])
-            response.update({"id":game_id})
+            update_dict = {'id':game_id}
+            response.update(update_dict)
             return {
                 'statusCode': 200,
                 'body': json.dumps(response)
