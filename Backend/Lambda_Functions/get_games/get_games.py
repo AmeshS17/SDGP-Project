@@ -38,19 +38,19 @@ def get_game_list(table):
     return games_list
 
 
-def convert_to_int():
+def decimal_to_int(item_dict):
     update_dict = {
-        "id":int(my_dict['id']),
-        "release_year":int(my_dict['release_year'])
+        "id":int(item_dict['id']),
+        "release_year":int(item_dict['release_year'])
     }
 
-    my_dict.update(update_dict)
+    item_dict.update(update_dict)
 
-    for key in my_dict['pos_features']:
-        my_dict['pos_features'].update({key:int(my_dict['pos_features'][key])})
+    for key in item_dict['pos_features']:
+        item_dict['pos_features'].update({key:int(item_dict['pos_features'][key])})
 
-    for key in my_dict['neg_features']:
-        my_dict['neg_features'].update({key:int(my_dict['neg_features'][key])})
+    for key in item_dict['neg_features']:
+        item_dict['neg_features'].update({key:int(item_dict['neg_features'][key])})
 
 
 def lambda_handler(event, context):
@@ -59,8 +59,7 @@ def lambda_handler(event, context):
         response = get_game(game_id, table)
         
         if 'title' in response:
-            game_id = int(response['id'])
-            update_dict = {'id':game_id}
+            response = convert_to_int()
             response.update(update_dict)
             return {
                 'statusCode': 200,
