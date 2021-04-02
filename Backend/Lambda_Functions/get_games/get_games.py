@@ -38,6 +38,21 @@ def get_game_list(table):
     return games_list
 
 
+def convert_to_int():
+    update_dict = {
+        "id":int(my_dict['id']),
+        "release_year":int(my_dict['release_year'])
+    }
+
+    my_dict.update(update_dict)
+
+    for key in my_dict['pos_features']:
+        my_dict['pos_features'].update({key:int(my_dict['pos_features'][key])})
+
+    for key in my_dict['neg_features']:
+        my_dict['neg_features'].update({key:int(my_dict['neg_features'][key])})
+
+
 def lambda_handler(event, context):
     if event['queryStringParameters'] and 'id' in event['queryStringParameters']:
         game_id = int(event['queryStringParameters']['id'])
