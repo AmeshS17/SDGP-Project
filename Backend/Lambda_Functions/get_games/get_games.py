@@ -59,8 +59,7 @@ def lambda_handler(event, context):
         response = get_game(game_id, table)
         
         if 'title' in response:
-            response = convert_to_int()
-            response.update(update_dict)
+            response = decimal_to_int(response)
             return {
                 'statusCode': 200,
                 'body': json.dumps(response)
