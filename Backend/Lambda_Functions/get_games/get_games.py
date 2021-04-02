@@ -52,6 +52,8 @@ def decimal_to_int(item_dict):
     for key in item_dict['neg_features']:
         item_dict['neg_features'].update({key:int(item_dict['neg_features'][key])})
 
+    return item_dict
+
 
 def lambda_handler(event, context):
     if event['queryStringParameters'] and 'id' in event['queryStringParameters']:
