@@ -195,3 +195,38 @@ model_dataframe['clean_reviews'] = stop_clean(model_dataframe['review'])
 
 model_dataframe['clean_reviews'] = model_dataframe['clean_reviews'].map(lambda x: remove_stopwords(x))
 
+# Build the bigram and trigram models
+#The bigram and trigram modeks are getting built here
+# feed a list of lists of words e.g. [['word1','word2'],['word3',# 'word4'] to get bigrams]
+bigram_model = gensim.models.Phrases(list(model_dataframe['clean_reviews']), min_count=5,threshold=10)
+
+#The trigram model is getting built here
+trigram_model = gensim.models.Phrases(bigram_model[list(model_dataframe['clean_reviews'])], threshold=10)
+
+# Faster way to get a sentence clubbed as a trigram/bigram
+# The quickest way to get a sentence bagged as a trigram/bigram
+bigram_mod = gensim.models.phrases.Phraser(bigram_model)
+
+# Building the trigram model
+trigram_mod = gensim.models.phrases.Phraser(trigram_model)
+
+
+def make_bigrams(texts):
+    return [bigram_mod[doc] for doc in texts]
+
+
+def make_trigrams(texts):
+    return [trigram_mod[bigram_mod[doc]] for doc in texts]
+
+
+model_dataframe['3gram_reviews'] = make_trigrams(model_dataframe['clean_reviews'])
+
+model_dataframe['3grams_nouns'] = model_dataframe['3gram_reviews'].map(lambda x: spacy_lemma(x))
+
+model_dataframe['3grams_nouns_verbs'] = model_dataframe['3gram_reviews'].map(
+    
+    lambda x: spacy_lemma(x, allowed_postags=['NOUN', 'VERB']))
+
+#saving the trained model to the file after execution of the code
+#this is done in order to get the good trained models
+model_dataframe.to_csv("./dataframes/final_df.csv")
