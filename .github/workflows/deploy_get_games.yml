@@ -22,7 +22,7 @@ jobs:
       - name: Zip get_games function
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip -qq ./Backend/Lambda_Functions/get_games/get_games.zip ./Backend/Lambda_Functions/get_games/get_games.py
+          args: zip -qq ./get_games.zip ./Backend/Lambda_Functions/get_games/get_games.py
           
       # Deploys the script to AWS Lambda
       - name: Deploy get_games function to lambda function get_games
@@ -32,7 +32,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           function_name: get_games
-          zip_file: Backend/Lambda_Functions/get_games/get_games.zip
+          zip_file: get_games.zip
 
   test_request:
     name: Test request (Integration with AWS Lambda)
