@@ -107,18 +107,29 @@
             </div>
             <div class="form-group">
               <label for="uploadGame" style= "color: aliceblue;">Upload your file:</label>
-              <input type="file" name="file" style= "color: aliceblue;">
+              <input type="file" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+               ID="fileSelect" runat="server"    style= "color: aliceblue;">
             </div>
             <hr>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
         
-          
+          <input type="file" 
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" ID="fileSelect" runat="server" />  
         </div>
       </div>
     
     </div>
   </div>
+
+  <img id="myImg" src="https://media.geeksforgeeks.org/wp-content/uploads/geeksforgeeks-6.png" alt="Snow" style="width:100%;max-width:300px">
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+</div>
 
   
   <div class="footer-basic">

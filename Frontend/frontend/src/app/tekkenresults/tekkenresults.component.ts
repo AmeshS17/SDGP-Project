@@ -149,9 +149,9 @@ export class TekkenresultsComponent implements OnInit {
                     }
                   ]
                 }
-                })
+                })}}
 
-                var myChart7 = new Chart('myChart7', {
+              /* var myChart7 = new Chart('myChart7', {
                 type: 'doughnut',
                 options: {
                   responsive: true,
@@ -199,4 +199,4 @@ export class TekkenresultsComponent implements OnInit {
                     }
                   })
                 }
-              }
+              }*/
