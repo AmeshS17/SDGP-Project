@@ -125,4 +125,30 @@ jobs:
           function_name: async_invoke_model
           zip_file: async_invoke_model.zip
 
+  deploy_game_listing:
+    name: Deploy game listing service
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Zips get_games.py
+      - name: Zip get_games function
+        uses: montudor/action-zip@v0.1.0
+        with:
+          args: zip -qq ./get_games.zip ./Backend/Lambda_Functions/get_games/get_games.py
+          
+      # Deploys the script to AWS Lambda
+      - name: Deploy get_games function to lambda function get_games
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          function_name: get_games
+          zip_file: get_games.zip
+
 
