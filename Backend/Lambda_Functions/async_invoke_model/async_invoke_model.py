@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     
     print("Invocation event - " + str(event))
     
-    key = event['filekey']
+    key = event['filekey'][:-4]+"csv"
     
     invoke_model(key)
     
