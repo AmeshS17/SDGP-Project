@@ -24,5 +24,5 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
-        'body': json.dumps({"upload_url": presigned_url,"file_key":upload_key[:-3]+"json"})
+        'body': json.dumps({"uploadurl": presigned_url,"filekey":upload_key[:-3]+"json"})
     }
