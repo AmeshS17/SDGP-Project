@@ -22,6 +22,7 @@ def get_summary(base_url,file_key):
     payload = {"filekey":file_key}
     for i in range(6):
         response = requests.post(base_url+"results",json=payload)
+        assert response.status_code == 200
         lambda_status_code = int(response.json()['statusCode'])
         if lambda_status_code == 204:
             time.sleep((i+1)*5)
