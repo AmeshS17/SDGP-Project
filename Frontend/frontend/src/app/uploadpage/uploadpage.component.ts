@@ -7,9 +7,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UploadpageComponent implements OnInit {
 
-  constructor() { }
+  uploadurl : string = 'null';
+    filekey : string = 'null';
 
-  ngOnInit(): void {
+    url_response : url[];
+
+  constructor( private UploadpageService : UploadpageService ) { }
+
+  ngOnInit() {
+
+    this.getUploadUrl();
+
+    getUploadUrl(): void{
+      this.UploadpageService.getUploadUrl().subscribe(
+        data =>{
+          this.
+        }
+
+      )
+    }
+
+
   }
 
 }
+
+
