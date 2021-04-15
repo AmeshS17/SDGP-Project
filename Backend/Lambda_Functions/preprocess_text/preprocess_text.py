@@ -19,7 +19,10 @@ def get_csv(bucket,key):
         steam_purchase = row['steam_purchase'].lower() == 'true'
         received_for_free = row['received_for_free'].lower() == 'true'
         written_during_early_access = row['written_during_early_access'].lower() == 'true'
-        update_dict = {"author_playtime_forever":author_playtime_forever,"steam_purchase":steam_purchase,"received_for_free":received_for_free,"written_during_early_access":written_during_early_access}
+        update_dict = {"author_playtime_forever":author_playtime_forever,
+                        "steam_purchase":steam_purchase,
+                        "received_for_free":received_for_free,
+                        "written_during_early_access":written_during_early_access}
         row.update(update_dict)
 
 
