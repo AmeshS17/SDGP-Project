@@ -4,6 +4,20 @@ import boto3
 import csv
 import io
 
+import numpy as np
+import pandas as pd
+import json
+import spacy
+import sys
+
+import bbcode
+import re
+
+from spacy_langdetect import LanguageDetector
+from gensim.parsing.preprocessing import STOPWORDS
+
+import gensim
+
 s3 = boto3.client('s3')
 lambda_client = boto3.client('lambda')
 
@@ -33,17 +47,10 @@ def get_csv(bucket,key):
 
 
 def put_csv(csv_dict,bucket,key):
-    csv_headers = csv_dict[0].keys()
-    
-    filestream = io.StringIO()
-    
-    writer = csv.DictWriter(filestream, csv_headers)
-    
-    writer.writeheader()
-    writer.writerows(csv_dict)
     
     csv_object = filestream.getvalue()
     
+
     response = s3.put_object(Body=csv_object,Bucket=bucket,Key=key)
 
     print(response)
@@ -79,9 +86,11 @@ def lambda_handler(event, context):
     
     try:
         data_dict = get_csv(get_bucket,key)
-        
-        
-        uploaded = put_csv(data_dict,put_bucket,key)
+        filestream = io.StringIO()
+
+
+
+        uploaded = put_csv(filestream,put_bucket,key)
         
         waiter.wait(
         Bucket=put_bucket,
