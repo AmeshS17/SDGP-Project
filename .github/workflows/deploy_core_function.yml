@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Dependencies
+      - name: Install Dependencies for deployment package
         run: |
           python -m pip install --upgrade pip
           pip install --target ./Backend/Lambda_Functions/preprocess_text/packages install -r ./Backend/requirements.txt
@@ -56,6 +56,18 @@ jobs:
         with:
           args: zip -qq -r ./preprocess_text.zip ./Backend/Lambda_Functions/preprocess_text/
           
+      - name: Upload deployment package
+        uses: zdurham/s3-upload-github-action@master
+        with:
+          args: --acl public-read
+        env:
+          FILE: ./preprocess_text.zip
+          AWS_REGION: 'us-west-2'
+          S3_BUCKET: 'model-sourcecode'
+          S3_KEY: 'preprocess_text.zip'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       # Deploys the script to AWS Lambda
       - name: Deploy preprocess_text function to lambda function preprocess_text
         uses: appleboy/lambda-action@master
@@ -64,7 +76,8 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           function_name: preprocess_text
-          zip_file: preprocess_text.zip
+          s3_bucket: 'model-sourcecode'
+          s3_key: 'preprocess_text.zip'
   
   deploy_retriever:
     name: Deploy results retriever
