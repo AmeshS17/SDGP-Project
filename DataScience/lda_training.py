@@ -65,3 +65,13 @@ def removeStopwords(doc):
 modelDataframe['3grams_nouns'] = modelDataframe['3grams_nouns'].map(lambda x: removeStopwords(x))
 modelDataframe['3grams_nouns_verbs'] = modelDataframe['3grams_nouns_verbs'].map(lambda x: removeStopwords(x))
 
+modelDataframe['3grams_nouns'] = modelDataframe['3grams_nouns'].map(lambda x: removeStopwords(x))
+modelDataframe['3grams_nouns_verbs'] = modelDataframe['3grams_nouns_verbs'].map(lambda x: removeStopwords(x))
+
+# build a dictionary & corpus based on the nouns column
+document = list(modelDataframe['3grams_nouns'])
+dictionary = gensim.corpora.Dictionary(document)
+dictionary.filter_extremes(no_below=10, no_above=0.5)
+corpus = [dictionary.doc2bow(word) for word in document]
+
+
