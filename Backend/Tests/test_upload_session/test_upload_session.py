@@ -11,8 +11,9 @@ def get_upload_url(api_url):
 
 
 def upload_file(upload_url,file_path):
+    headers = {"Content-Type":"text/csv"}
     with open(file_path,"rb") as file:
-        response = requests.put(upload_url,data=file)
+        response = requests.put(upload_url,data=file,headers=headers)
     print( "upload_file response status" + str(response.status_code))
     print( "upload_file response" + response.text)
     assert response.status_code == 200
