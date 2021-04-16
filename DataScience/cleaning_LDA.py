@@ -141,3 +141,92 @@ steam_reviews_dict = {'recommendationid': [review_data[i]['recommendationid'] fo
 # making a dataframe using the dict
 data_frame_raw = pd.DataFrame(steam_reviews_dict)
 
+
+data_frame_raw = data_frame_raw[data_frame_raw['received_for_free'] == False]
+
+data_frame_raw['author_playtime_forever'] = data_frame_raw['author_playtime_forever'] / 60
+
+data_frame_raw['author_playtime_last_two_weeks'] = data_frame_raw['author_playtime_last_two_weeks'] / 60
+
+data_frame_raw['review_length'] = data_frame_raw['review'].map(lambda x: len(x.split()))
+
+data_frame_raw_num = data_frame_raw.select_dtypes(exclude=['O', 'bool'])
+
+# at least 8 hours of minimum playtime
+dataframe_usable = data_frame_raw[
+    (data_frame_raw['author_playtime_forever'] >= 8)]
+
+dataframe_usable['review_length'] = dataframe_usable['review'].map(lambda x: len(x.split()))
+
+# setting percentile to 40% to get rid of overly short reviews
+
+dataframe_ready = dataframe_usable[dataframe_usable['review_length'] > np.percentile(dataframe_usable['review_length'], 40)].reset_index(drop=True)
+
+dataframe_cleaning = dataframe_ready.drop_duplicates(subset=['author_steamid', 'review'])
+
+# get languages by document
+from spacy.language import Language
+
+
+# create custom component to use add pipe
+@Language.factory("my_component")
+def my_component(nlp, name):
+    return LanguageDetector()
+
+
+# get languages by document
+nlp = spacy.load("en_core_web_sm")
+nlp.add_pipe("my_component", last=True)
+
+
+def get_document_language(text):
+    doc = nlp(text)
+    return doc._.language['language']
+
+
+doc_langs = [get_document_language(x) for x in dataframe_cleaning['review']]
+dataframe_cleaning['review_lang'] = doc_langs
+
+dataframe_languages_cleaned = dataframe_cleaning[dataframe_cleaning['review_lang'] == 'en'].reset_index(drop=True)
+
+model_dataframe = dataframe_languages_cleaned[['timestamp_created', 'review']]
+
+model_dataframe['clean_reviews'] = stop_clean(model_dataframe['review'])
+
+model_dataframe['clean_reviews'] = model_dataframe['clean_reviews'].map(lambda x: remove_stopwords(x))
+
+# Build the bigram and trigram models
+#The bigram and trigram modeks are getting built here
+# feed a list of lists of words e.g. [['word1','word2'],['word3',# 'word4'] to get bigrams]
+bigram_model = gensim.models.Phrases(list(model_dataframe['clean_reviews']), min_count=5,threshold=10)
+
+#The trigram model is getting built here
+trigram_model = gensim.models.Phrases(bigram_model[list(model_dataframe['clean_reviews'])], threshold=10)
+
+# Faster way to get a sentence clubbed as a trigram/bigram
+# The quickest way to get a sentence bagged as a trigram/bigram
+bigram_mod = gensim.models.phrases.Phraser(bigram_model)
+
+# Building the trigram model
+trigram_mod = gensim.models.phrases.Phraser(trigram_model)
+
+
+def make_bigrams(texts):
+    return [bigram_mod[doc] for doc in texts]
+
+
+def make_trigrams(texts):
+    return [trigram_mod[bigram_mod[doc]] for doc in texts]
+
+
+model_dataframe['3gram_reviews'] = make_trigrams(model_dataframe['clean_reviews'])
+
+model_dataframe['3grams_nouns'] = model_dataframe['3gram_reviews'].map(lambda x: spacy_lemma(x))
+
+model_dataframe['3grams_nouns_verbs'] = model_dataframe['3gram_reviews'].map(
+    
+    lambda x: spacy_lemma(x, allowed_postags=['NOUN', 'VERB']))
+
+#saving the trained model to the file after execution of the code
+#this is done in order to get the good trained models
+model_dataframe.to_csv("./dataframes/final_df.csv")

@@ -11,7 +11,7 @@ table = dynamodb.Table('games')
 
 def get_game_list(table):
     scan_kwargs = {
-        'ProjectionExpression': "id, title, #description",
+        'ProjectionExpression': "id, title, #description,filekey",
         'ExpressionAttributeNames': {"#description": "desc"}
     }
 
@@ -39,6 +39,11 @@ def lambda_handler(event, context):
     
     return {
         'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': 'https://www.example.com',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         'body': json.dumps(response)
     }
     
