@@ -19,8 +19,7 @@ def lambda_handler(event, context):
         ClientMethod='put_object',
         Params={
             'Bucket': 'raw-csv-files',
-            'Key': upload_key,
-            'ACL':'public-read-write'
+            'Key': upload_key
         }
     )
     
