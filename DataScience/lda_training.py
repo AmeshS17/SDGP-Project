@@ -61,10 +61,6 @@ def removeStopwords(doc):
     words = [num2words(w) for w in doc if w != '' and w not in stopwords]
     return words
 
-
-modelDataframe['3grams_nouns'] = modelDataframe['3grams_nouns'].map(lambda x: removeStopwords(x))
-modelDataframe['3grams_nouns_verbs'] = modelDataframe['3grams_nouns_verbs'].map(lambda x: removeStopwords(x))
-
 modelDataframe['3grams_nouns'] = modelDataframe['3grams_nouns'].map(lambda x: removeStopwords(x))
 modelDataframe['3grams_nouns_verbs'] = modelDataframe['3grams_nouns_verbs'].map(lambda x: removeStopwords(x))
 
@@ -74,4 +70,29 @@ dictionary = gensim.corpora.Dictionary(document)
 dictionary.filter_extremes(no_below=10, no_above=0.5)
 corpus = [dictionary.doc2bow(word) for word in document]
 
+# run the training in a loop since we can amass a large number of models and evaluate them later
+for loopNum in range(2):
+    # randomize the number of topics and passes within a reasonable range as the variation has a chance to produce an
+    # effective model
+    numberOfTopics = random.randint(5, 8)
+    passes = random.randint(100, 120)
+    eval_every = None
+    seed = np.random.randint(0, 999999)
+    print("Seed:", seed, "\n")
 
+    ldaModel = LdaMulticore(corpus, num_topics=numberOfTopics, id2word=dictionary, passes=passes, alpha='asymmetric',
+                            eval_every=eval_every, workers=3, random_state=seed)
+
+    # Check resulting topics.
+    listOfTopics = ldaModel.print_topics(num_topics=numberOfTopics, num_words=15)
+    for index, i in enumerate(listOfTopics):
+        string = str(i[1])
+        for c in "0123456789+*\".":
+            string = string.replace(c, "")
+        string = string.replace("  ", " ")
+        print(string)
+    # assign a file name based on the loop number so that models aren't overridden during successive iterations.
+    path = './models/both/nouns_only'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    ldaModel.save(f'./models/both/nouns_only/model1-{loopNum}.model')        
