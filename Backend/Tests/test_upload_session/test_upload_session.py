@@ -14,6 +14,7 @@ def upload_file(upload_url,file_path):
     with open(file_path,"rb") as file:
         response = requests.put(upload_url,data=file)
     print( "upload_file response status" + str(response.status_code))
+    print( "upload_file response" + response.text)
     assert response.status_code == 200
     print ('upload_file passed')
     print(file.name + " has been uploaded to S3")
