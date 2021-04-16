@@ -90,8 +90,16 @@ for loopNum in range(2):
         for c in "0123456789+*\".":
             string = string.replace(c, "")
         string = string.replace("  ", " ")
-        print(string)
-    # assign a file name based on the loop number so that models aren't overridden during successive iterations.
+        print(string) 
+     # calculate & display perplexity
+    print('\nPerplexity: ', ldaModel.log_perplexity(corpus))  # a measure of how good the model is. lower the better.
+
+    # calculate & display coherence
+    coherenceModel = CoherenceModel(model=ldaModel, texts=document, dictionary=dictionary, coherence='c_v')
+    ldaCoherence = coherenceModel.get_coherence()
+    print('\nCoherence Score: ', ldaCoherence)
+    
+     # assign a file name based on the loop number so that models aren't overridden during successive iterations.
     path = './models/both/nouns_only'
     if not os.path.exists(path):
         os.makedirs(path)
