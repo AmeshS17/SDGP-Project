@@ -107,20 +107,19 @@ review_data = [v for v in jayson['reviews'].values()]
 # making dict from json
 steam_reviews_dict = {'recommendationid': [review_data[i]['recommendationid'] for i in range(len(review_data))],
 
-                      'author_steamid': [review_data[i]['author']['steamid'] for i in range(len(review_data))],
+                      'author.steamid': [review_data[i]['author.steamid'] for i in range(len(review_data))],
 
-                      'author_num_games_owned': [review_data[i]['author']['num_games_owned'] for i in
-                                                 range(len(review_data))],
+                      'author.num_games_owned': [review_data[i]['author.num_games_owned'] for i in range(len(review_data))],
 
-                      'author_num_reviews': [review_data[i]['author']['num_reviews'] for i in range(len(review_data))],
+                      'author.num_reviews': [review_data[i]['author.num_reviews'] for i in range(len(review_data))],
 
-                      'author_playtime_forever': [review_data[i]['author']['playtime_forever'] for i in
+                      'author.playtime_forever': [review_data[i]['author.playtime_forever'] for i in
                                                   range(len(review_data))],
 
-                      'author_playtime_last_two_weeks': [review_data[i]['author']['playtime_last_two_weeks'] for i in
+                      'author.playtime_last_two_weeks': [review_data[i]['author.playtime_last_two_weeks'] for i in
                                                          range(len(review_data))],
 
-                      'author_last_played': [review_data[i]['author']['last_played'] for i in range(len(review_data))],
+                      'author.last_played': [review_data[i]['author.last_played'] for i in range(len(review_data))],
 
                       'review': [review_data[i]['review'] for i in range(len(review_data))],
 
@@ -144,9 +143,9 @@ data_frame_raw = pd.DataFrame(steam_reviews_dict)
 
 data_frame_raw = data_frame_raw[data_frame_raw['received_for_free'] == False]
 
-data_frame_raw['author_playtime_forever'] = data_frame_raw['author_playtime_forever'] / 60
+data_frame_raw['author.playtime_forever'] = data_frame_raw['author.playtime_forever'] / 60
 
-data_frame_raw['author_playtime_last_two_weeks'] = data_frame_raw['author_playtime_last_two_weeks'] / 60
+data_frame_raw['author.playtime_last_two_weeks'] = data_frame_raw['author.playtime_last_two_weeks'] / 60
 
 data_frame_raw['review_length'] = data_frame_raw['review'].map(lambda x: len(x.split()))
 
@@ -154,7 +153,7 @@ data_frame_raw_num = data_frame_raw.select_dtypes(exclude=['O', 'bool'])
 
 # at least 8 hours of minimum playtime
 dataframe_usable = data_frame_raw[
-    (data_frame_raw['author_playtime_forever'] >= 8)]
+    (data_frame_raw['author.playtime_forever'] >= 8)]
 
 dataframe_usable['review_length'] = dataframe_usable['review'].map(lambda x: len(x.split()))
 
@@ -162,7 +161,7 @@ dataframe_usable['review_length'] = dataframe_usable['review'].map(lambda x: len
 
 dataframe_ready = dataframe_usable[dataframe_usable['review_length'] > np.percentile(dataframe_usable['review_length'], 40)].reset_index(drop=True)
 
-dataframe_cleaning = dataframe_ready.drop_duplicates(subset=['author_steamid', 'review'])
+dataframe_cleaning = dataframe_ready.drop_duplicates(subset=['author.steamid', 'review'])
 
 # get languages by document
 from spacy.language import Language
