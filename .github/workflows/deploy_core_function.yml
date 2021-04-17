@@ -83,23 +83,27 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: preprocessor
-          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
           cd ./Backend/Lambda_Functions/preprocess_text
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
       # Deploys the script to AWS Lambda
-      #- name: Deploy preprocess_text function to lambda function preprocess_text
-      #  uses: appleboy/lambda-action@master
-      #  with:
-      #    aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #    aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #    aws_region: us-west-2
-      #    function_name: preprocess_text
-      #    s3_bucket: 'model-sourcecode'
-      #    s3_key: 'preprocess_text.zip'
+      - name: Deploy preprocess_text function to lambda function preprocess_text
+        uses: appleboy/lambda-action@master
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: preprocessor
+          IMAGE_TAG: latest
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          function_name: preprocess_text
+          image_uri: $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
   
   deploy_retriever:
     name: Deploy results retriever
