@@ -34,20 +34,20 @@ jobs:
           ECR_REPOSITORY: model
           IMAGE_TAG: latest
         run: |
-          cd ./Backend/Lambda_Functions/preprocess_text
+          cd ./Backend/Lambda_Functions/generate_summary
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
 
       # Deploys the script to AWS Lambda
-      #- name: Deploy preprocess_text function to lambda function preprocess_text
-      #  uses: appleboy/lambda-action@master
-      #  with:
-      #    aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #    aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #    aws_region: us-west-2
-      #    function_name: generate_summary
-      #    image_uri: ${{ steps.login-ecr.outputs.registry }}/model:latest
+      - name: Deploy generate_summary function to lambda function generate_summary
+        uses: appleboy/lambda-action@master
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          function_name: generate_summary
+          image_uri: ${{ steps.login-ecr.outputs.registry }}/model:latest
 
 
 
