@@ -12,18 +12,9 @@ export class TekkenresultsComponent implements OnInit {
 
   title: string = 'null';
   desc: string = 'null';
-  id : number =0;
-  release_year: number=0;
-    pos_features: Features = 0;
-    neg_features: Features=0;
   
-  games: Game = { id: 0,
-    title: 'null',
-    developer: 'null',
-    desc: 'null',
-    release_year: 0,
-    pos_features: 'null',
-    neg_features: 'null'}
+  
+  /*games: Game [];*/
 
   
 
@@ -32,7 +23,7 @@ export class TekkenresultsComponent implements OnInit {
   constructor(private GameService: GameService) { }
 
   ngOnInit(){
-    this.getGameInfo();
+   /* this.getGameInfo();*/
 
     
 
@@ -223,7 +214,7 @@ export class TekkenresultsComponent implements OnInit {
                     }
                   })
                 }
-              }*/
+              }
 
               getGameInfo(): void {
                 this.GameService.getGame().subscribe(
@@ -244,4 +235,6 @@ export class TekkenresultsComponent implements OnInit {
                       console.log('For each feature ' + value);
                       positive_dataset.push(this.games[0].pos_features[value]);
                       negative_dataset.push(this.games[0].neg_features[value])
-                    }}}}
+                    }}}}*/
+
+                  }
