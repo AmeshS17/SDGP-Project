@@ -103,4 +103,8 @@ for loopNum in range(2):
     path = './models/both/nouns_only'
     if not os.path.exists(path):
         os.makedirs(path)
-    ldaModel.save(f'./models/both/nouns_only/model1-{loopNum}.model')        
+    ldaModel.save(f'./models/both/nouns_only/model1-{loopNum}.model') 
+   
+# save the model dataframe for use in later sections.
+modelDataframe.to_csv('./dataframes/model_df.csv')
+
