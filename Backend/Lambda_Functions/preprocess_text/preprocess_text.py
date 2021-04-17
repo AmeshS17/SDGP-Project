@@ -4,19 +4,7 @@ import boto3
 import csv
 import io
 
-import numpy as np
-import pandas as pd
-import json
-import spacy
-import sys
 
-import bbcode
-import re
-
-from spacy_langdetect import LanguageDetector
-from gensim.parsing.preprocessing import STOPWORDS
-
-import gensim
 
 s3 = boto3.client('s3')
 lambda_client = boto3.client('lambda')
