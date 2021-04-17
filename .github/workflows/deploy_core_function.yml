@@ -17,21 +17,55 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Zips generate_summary.py
-      - name: Zip generate_summary function
-        uses: montudor/action-zip@v0.1.0
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          args: zip -qq ./generate_summary.zip ./Backend/Lambda_Functions/generate_summary/generate_summary.py
-          
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: model
+          IMAGE_TAG: latest
+        run: |
+          cd ./Backend/Lambda_Functions/preprocess_text
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+
       # Deploys the script to AWS Lambda
-      - name: Deploy generate_summary code to lambda function generate_summary
-        uses: appleboy/lambda-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: us-west-2
-          function_name: generate_summary
-          zip_file: generate_summary.zip
+      #- name: Deploy preprocess_text function to lambda function preprocess_text
+      #  uses: appleboy/lambda-action@master
+      #  with:
+      #    aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    aws_region: us-west-2
+      #    function_name: generate_summary
+      #    image_uri: ${{ steps.login-ecr.outputs.registry }}/model:latest
+
+
+
+      # Zips generate_summary.py
+      #- name: Zip generate_summary function
+      #  uses: montudor/action-zip@v0.1.0
+      #  with:
+      #    args: zip -qq ./generate_summary.zip ./Backend/Lambda_Functions/generate_summary/generate_summary.py
+      #    
+      # Deploys the script to AWS Lambda
+      #- name: Deploy generate_summary code to lambda function generate_summary
+      #  uses: appleboy/lambda-action@master
+      #  with:
+      #    aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    aws_region: us-west-2
+      #    function_name: generate_summary
+      #    zip_file: generate_summary.zip
           
   deploy_preprocessor:
     name: Deploy text preprocessor
@@ -40,10 +74,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+      #- name: Setup python 3.8
+      #  uses: actions/setup-python@v2
+      #  with:
+      #    python-version: '3.x'
 
       #- name: Install Dependencies for deployment package
       #  run: |

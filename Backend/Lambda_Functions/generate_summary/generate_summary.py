@@ -4,6 +4,19 @@ import boto3
 import csv
 import io
 
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import pandas as pd
+import spacy
+import gensim
+from gensim.models import LdaMulticore
+from gensim.parsing.preprocessing import STOPWORDS
+from gensim import corpora
+from gensim.models import LdaMulticore
+import bbcode
+import json
+import re
+import string
+
 s3 = boto3.client('s3')
 
 def get_csv(bucket,key):
