@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from "chart.js";
+import {GameService} from './tekkenresult.service';
+import {Game} from './tekkenresults.model';
 
 @Component({
   selector: 'app-tekkenresults',
@@ -8,11 +10,33 @@ import { Chart } from "chart.js";
 })
 export class TekkenresultsComponent implements OnInit {
 
+  title: string = 'null';
+  desc: string = 'null';
+  id : number =0;
+  release_year: number=0;
+    pos_features: Features = 0;
+    neg_features: Features=0;
+  
+  games: Game = { id: 0,
+    title: 'null',
+    developer: 'null',
+    desc: 'null',
+    release_year: 0,
+    pos_features: 'null',
+    neg_features: 'null'}
+
+  
+
   homeSlider={items: 1, dots: true, nav: true};
 
-  constructor() { }
+  constructor(private GameService: GameService) { }
 
   ngOnInit(){
+    this.getGameInfo();
+
+    
+
+
     var myChart1 = new Chart('myChart1', {
       type: 'line',
       data: {
@@ -149,7 +173,7 @@ export class TekkenresultsComponent implements OnInit {
                     }
                   ]
                 }
-                })}}
+                })}
 
               /* var myChart7 = new Chart('myChart7', {
                 type: 'doughnut',
@@ -200,3 +224,24 @@ export class TekkenresultsComponent implements OnInit {
                   })
                 }
               }*/
+
+              getGameInfo(): void {
+                this.GameService.getGame().subscribe(
+                  data => {
+                    this.games = data;
+                    this.title = this.games[0]['title'];
+                    this.desc = this.games[0]['desc'];
+                    console.log(this.games[0]);
+              
+                    
+                    console.log(Object.keys(this.games[0].pos_features));
+                    
+                    let graph_labels: string[] = Object.keys(this.games[0].pos_features);
+                    let positive_dataset: number[] = []
+                    let negative_dataset: number[] = []
+              
+                    graph_labels.forEach( value =>{
+                      console.log('For each feature ' + value);
+                      positive_dataset.push(this.games[0].pos_features[value]);
+                      negative_dataset.push(this.games[0].neg_features[value])
+                    }}}}
