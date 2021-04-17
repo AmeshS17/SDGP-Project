@@ -80,14 +80,14 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build, tag, and push image to Amazon ECR
-          env:
-            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-            ECR_REPOSITORY: imagesample
-            IMAGE_TAG: ${{ github.sha }}
-          run: |
-            cd ./Backend/Lambda_Functions/preprocess_text
-            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-            docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: imagesample
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd ./Backend/Lambda_Functions/preprocess_text
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
 
       # Deploys the script to AWS Lambda
