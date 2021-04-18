@@ -76,4 +76,52 @@ def assign_topics(ldamodel=lda_model, corpus=corpus, documents=documents):
 topic_sent = assign_topics(ldamodel=lda_model, corpus=corpus, documents=documents)
 # discard the rows that have "NO TOPIC" as the dominant topic
 topic_sent = topic_sent[topic_sent['Dominant_Topic'] != 'NO TOPIC']
+
+dominant_topic_dataframe = topic_sent.reset_index()
+# set the columns of the data set
+dominant_topic_dataframe.columns = ['document_no', 'dominant_topic', 'topic_perc_contrib', 'keywords', 'tokens',
+                                    'original_text']
+# count the total number of tokens and assign  to a column
+dominant_topic_dataframe['num_tokens'] = dominant_topic_dataframe['tokens'].map(lambda x: len(x))
+# add unique tokens to a column
+dominant_topic_dataframe['unique_tokens'] = dominant_topic_dataframe['tokens'].map(lambda x: list(set(x)))
+# count the number unique tokens and add to a column
+dominant_topic_dataframe['num_unique_tokens'] = dominant_topic_dataframe['unique_tokens'].map(lambda x: len(x))
+dominant_topic_dataframe = dominant_topic_dataframe[
+    ['dominant_topic', 'original_text', 'topic_perc_contrib', 'tokens', 'num_tokens', 'unique_tokens',
+     'num_unique_tokens', 'keywords']]
+dominant_topic_dataframe.head(10)
+
+# calculate the average (using median here) number of tokens to cut off overly lengthy reviews
+check_tokens = dominant_topic_dataframe['num_tokens'].median()
+# keep only the reviews with tokens less than or equal to the median
+tokens_df = dominant_topic_dataframe[dominant_topic_dataframe['num_tokens'] <= check_tokens]
+tokens_df.head()
+
+# check the proportion of reviews assigned to each topic
+cls_balance = tokens_df['dominant_topic'].value_counts(normalize=True)
+print(cls_balance)
+cls_balance.plot(kind='barh')
+
+# Sample 5% of the dataset randomly and write to csv
+sample_dataframe = tokens_df.sample(frac=0.05, random_state=1337)
+sample_dataframe.to_csv('./dataframes/sample_dataframe.csv')
+
+
+# manually label the csv file exported above marking 1 when dominant topic is correctly identified and 0 for
+# misclassification
+sample_dataframe_mod = pd.read_csv('./dataframes/sample_tokens_df_mod.csv', index_col=0)
+
+samp_dataframe = sample_dataframe_mod.groupby(['num_tokens', 'correct'], as_index=False).count()[
+    ['num_tokens', 'correct', 'dominant_topic']]
+
+# set columns
+samp_dataframe.columns = ['num_tokens', 'correct', 'count']
+# view the correct & total counts as number of tokens changes
+samp_dataframe
+
+# use number of tokens less than or equal to 80th percentile
+trunc_samp_2_df = samp_dataframe[samp_dataframe['num_tokens'] <= (np.percentile(sample_dataframe_mod['num_tokens'], 80))]
+# turn unique number of tokens (no repeating values) into a list 
+trunc_unique_num_tokens = list(trunc_samp_2_df['num_tokens'].unique())
        
