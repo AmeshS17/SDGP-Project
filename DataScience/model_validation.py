@@ -33,6 +33,49 @@ for index, i in enumerate(topic_list):
     str1 = str(i[1])
     for c in "0123456789+*\".":
         str1 = str1.replace(c, "")
+        
+ 
+# Map each topic number to a topic name using the topic list from previous step
+topic_dict = {'0': 'Network Performance',
+              '1': 'Overall Experience',
+              '2': 'Gameplay Mechanics',
+              '3': 'Content/Value',
+              '4': 'NO TOPIC',
+              }
+
+# Identify the dominant topic for each review
+def assign_topics(ldamodel=lda_model, corpus=corpus, documents=documents):
+    sent_topics_df = pd.DataFrame()
+    for i, row in enumerate(ldamodel[corpus]):
+        row = sorted(row, key=lambda x: (x[1]), reverse=True)
+        for j, (topic_num, prop_topic) in enumerate(row):
+            if j == 0:  # => dominant topic
+                # Get the representation for a topic (list of word - probability pairs)
+                wp = ldamodel.show_topic(topic_num)
+                topic_keywords = ", ".join([word for word, prop in wp])
+                # add dominant topic, percentage contribution and keywords to the topic dataframe
+                sent_topics_df = sent_topics_df.append(
+                    pd.Series([topic_dict[str(topic_num)], round(prop_topic, 4), topic_keywords]),
+                    ignore_index=True)
+
+            else:
+                break
+    # name the columns of the data frame
+    sent_topics_df.columns = ['Dominant_Topic', 'Perc_Contribution', 'Topic_Keywords']
+
+    # reference the original review 
+    orig_contents = pd.Series(model_data_frame['review'])
+    docs = pd.Series(documents)
+    # add the original review column referenced above to the newly made dataframe
+    sent_topics_df = pd.concat([sent_topics_df, docs, orig_contents], axis=1)
+    return sent_topics_df
+
+
+# use the function above to make a new data frame
+topic_sent = assign_topics(ldamodel=lda_model, corpus=corpus, documents=documents)
+# discard the rows that have "NO TOPIC" as the dominant topic
+topic_sent = topic_sent[topic_sent['Dominant_Topic'] != 'NO TOPIC']
+       
     str1 = str1.replace("  ", " ")
     print(str1)
 
