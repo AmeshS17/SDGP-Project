@@ -388,7 +388,7 @@ def preprocess_data(review_data):
 
     filebuffer = io.StringIO()
 
-    model_dataframe.to_csv("C:/Users/Luxman/Downloads/clean_boi.csv")
+    model_dataframe.to_csv(filebuffer)
 
     #OUTPUT AS STRINGIO BUFFER
     return filebuffer
