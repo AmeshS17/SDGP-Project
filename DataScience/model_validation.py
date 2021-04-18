@@ -33,9 +33,10 @@ for index, i in enumerate(topic_list):
     str1 = str(i[1])
     for c in "0123456789+*\".":
         str1 = str1.replace(c, "")
-        
- 
-# Map each topic number to a topic name using the topic list from previous step
+    str1 = str1.replace("  ", " ")
+    print(str1)
+
+    # Map each topic number to a topic name using the topic list from previous step
 topic_dict = {'0': 'Network Performance',
               '1': 'Overall Experience',
               '2': 'Gameplay Mechanics',
@@ -76,6 +77,3 @@ topic_sent = assign_topics(ldamodel=lda_model, corpus=corpus, documents=document
 # discard the rows that have "NO TOPIC" as the dominant topic
 topic_sent = topic_sent[topic_sent['Dominant_Topic'] != 'NO TOPIC']
        
-    str1 = str1.replace("  ", " ")
-    print(str1)
-
