@@ -226,6 +226,5 @@ model_dataframe['3grams_nouns_verbs'] = model_dataframe['3gram_reviews'].map(
     
     lambda x: spacy_lemma(x, allowed_postags=['NOUN', 'VERB']))
 
-#saving the trained model to the file after execution of the code
-#this is done in order to get the good trained models
+#saving the cleaned dataframe in order to use in the model training phase
 model_dataframe.to_csv("./dataframes/final_df.csv")
