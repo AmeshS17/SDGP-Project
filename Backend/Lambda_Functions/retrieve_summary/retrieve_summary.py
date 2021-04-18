@@ -26,13 +26,18 @@ def lambda_handler(event, context):
     # Get the object from the event and show its content type
     get_bucket = 'summary-json-files'
 
-    get_key = event['filekey']
+    get_key = event["queryStringParameters"]['filekey']
     
     try:
         summary = get_json(get_bucket,get_key)
         
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,GET'
+            },
             'body': json.dumps(summary)
         }
         
@@ -41,6 +46,11 @@ def lambda_handler(event, context):
         print('Error getting object {} from bucket {}. Make sure they exist and your bucket is in the same region as this function.'.format(get_key, get_bucket))
         return {
             'statusCode': 204,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,GET'
+            },
             'body': json.dumps({"filekey":get_key})
         }
         raise e
