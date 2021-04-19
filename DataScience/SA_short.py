@@ -59,3 +59,25 @@ reviewTopicsDf['compound_sentiment'] = reviewTopicsDf['review'].map(lambda x: se
 reviewTopicsDf.to_csv('C:/Users/Downloads/32323.csv')
 sentimentDictionary = {}
 
+# iterate through the topic dictionary
+for topic in list(topicDictionary.values()):
+    isCurrentTopic = reviewTopicsDf['Dominant_Topic'] == topic
+    # filter out only the reviews where dominant topic is equal to current iteration
+    topicDf = reviewTopicsDf[isCurrentTopic]
+    sentimentList = topicDf['compound_sentiment']
+    # populate pos,neg and neutral lists based on compound sentiment value
+    positiveList = [x for x in sentimentList if x > 0.1]
+    negativeList = [x for x in sentimentList if x < -0.1]
+    neutralList = [x for x in sentimentList if x not in positiveList and x not in negativeList]
+    totalList = len(sentimentList)
+    # set if condition to avoid zero division error
+    if totalList > 0:
+        # calculate sentiment percentages
+        positivePercentage = len(positiveList) / totalList
+        neutralPercentage = len(neutralList) / totalList
+        negativePercentage = len(negativeList) / totalList
+        sentimentDictionary[topic] = [round(positivePercentage, 3), round(neutralPercentage, 3),
+                                      round(negativePercentage, 3)]
+        # output percentages as positive, neutral, then negative
+sentimentDictionary
+print("\nBy review\n", sentimentDictionary)
