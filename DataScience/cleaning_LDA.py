@@ -9,7 +9,7 @@ import re
 
 from spacy_langdetect import LanguageDetector
 from gensim.parsing.preprocessing import STOPWORDS
-
+from spacy.language import Language
 import gensim
 
 parser = bbcode.Parser()
@@ -162,9 +162,6 @@ dataframe_usable['review_length'] = dataframe_usable['review'].map(lambda x: len
 dataframe_ready = dataframe_usable[dataframe_usable['review_length'] > np.percentile(dataframe_usable['review_length'], 40)].reset_index(drop=True)
 
 dataframe_cleaning = dataframe_ready.drop_duplicates(subset=['author.steamid', 'review'])
-
-# get languages by document
-from spacy.language import Language
 
 
 # create custom component to use add pipe
