@@ -24,7 +24,6 @@ def upload_file(upload_url,file_path):
 def get_summary(base_url,file_key):
     for i in range(6):
         response = requests.get(base_url+"results?filekey="+file_key)
-        print("get_summary request {} response = ".format(i) + str(response.text)
         lambda_status_code = int(response.status_code)
         if lambda_status_code == 204:
             time.sleep((i+1)*5)
