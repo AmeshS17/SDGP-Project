@@ -32,7 +32,7 @@ def put_json(csv_dict,bucket,key):
 
 def summarize(csv_content):
 
-    cleaned_data = pd.read_csv(csv_content, index_col=0, nrows=1000)
+    cleaned_data = pd.read_csv(csv_content, index_col=0, nrows=1500)
     cleaned_data['3gram_reviews'] = cleaned_data['3gram_reviews'].map(
         lambda x: ''.join(c for c in x if c == '_' or c not in string.punctuation).split())
     lda_model = LdaMulticore.load('model.model')
@@ -95,7 +95,7 @@ def summarize(csv_content):
     print("\nBy review\n", sentimentDictionary)
 
 
-    return sentiment_dictionary
+    return sentimentDictionary
 
 
 def lambda_handler(event, context):

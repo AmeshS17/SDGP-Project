@@ -331,12 +331,16 @@ def preprocess_data(review_data):
 
     data_frame_raw = data_frame_raw[data_frame_raw['received_for_free'] == False]
 
+    data_frame_raw['author.playtime_forever'] = data_frame_raw['author.playtime_forever'] / 60
+
+    data_frame_raw['author.playtime_last_two_weeks'] = data_frame_raw['author.playtime_last_two_weeks'] / 60
+
     data_frame_raw['review_length'] = data_frame_raw['review'].map(lambda x: len(x.split()))
 
     data_frame_raw_num = data_frame_raw.select_dtypes(exclude=['O', 'bool'])
 
     dataframe_usable = data_frame_raw[
-        (data_frame_raw['author.playtime_forever'] >= 0)]
+        (data_frame_raw['author.playtime_forever'] >= 8)]
 
     dataframe_usable['review_length'] = dataframe_usable['review'].map(lambda x: len(x.split()))
 

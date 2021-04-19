@@ -190,7 +190,6 @@ jobs:
           zip_file: get_games.zip
 
   test_upload_session:
-    if: ${{ false }}
     needs: [deploy_model,deploy_preprocessor,deploy_retriever,deploy_url_generator,deploy_async_model_trigger,deploy_game_listing]
     name: Test run an upload session
     
