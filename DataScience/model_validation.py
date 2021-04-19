@@ -149,4 +149,15 @@ for i in trunc_unique_num_tokens:
 # convert into pandas data frame
 trunc_samp_2_perc_df = pd.DataFrame(trunc_samp_2_perc_dict)
 trunc_samp_2_perc_df
+
+sample_token_correct_wrong = sample_dataframe_mod
+sample_token_mod_dataframe = sample_token_correct_wrong
+
+# only consider cases where number of tokens is greater than 2
+samp_count_dataframe = samp_dataframe[samp_dataframe['num_tokens'] > 2]
+samp_count_dataframe = samp_count_dataframe.groupby(['correct'], as_index=False).sum()[['correct', 'count']]
+
+# calculate misclassification rate when number of tokens is greater than 2
+ms_cls_rate3 = samp_count_dataframe['count'][0] / (samp_count_dataframe['count'][0] + samp_count_dataframe['count'][1])
+ms_cls_rate3
        
