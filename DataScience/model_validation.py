@@ -124,4 +124,29 @@ samp_dataframe
 trunc_samp_2_df = samp_dataframe[samp_dataframe['num_tokens'] <= (np.percentile(sample_dataframe_mod['num_tokens'], 80))]
 # turn unique number of tokens (no repeating values) into a list 
 trunc_unique_num_tokens = list(trunc_samp_2_df['num_tokens'].unique())
+
+trunc_samp_2_perc_dict = {'num_tokens': [], 'correct': [], 'wrong': [], 'total': [], 'ms_cls_rate (%)': []}
+# calculate the number of correct classifications for each unique token count
+for i in trunc_unique_num_tokens:
+    try:
+        token_correct = \
+            trunc_samp_2_df[(trunc_samp_2_df['num_tokens'] == i)]['count'][trunc_samp_2_df['correct'] == 1].reset_index(
+                drop=True)[0]
+
+    except IndexError:
+        token_correct = 0
+    # total instances of reviews with the given token count
+    token_total = trunc_samp_2_df[(trunc_samp_2_df['num_tokens'] == i)]['count'].sum()
+    # number of missclasifications for the given token count
+    token_wrong = token_total - token_correct
+    # append calculated valued 
+    trunc_samp_2_perc_dict['num_tokens'].append(i)
+    trunc_samp_2_perc_dict['correct'].append(token_correct)
+    trunc_samp_2_perc_dict['wrong'].append(token_wrong)
+    trunc_samp_2_perc_dict['total'].append(token_total)
+    trunc_samp_2_perc_dict['ms_cls_rate (%)'].append(token_wrong / token_total * 100)
+
+# convert into pandas data frame
+trunc_samp_2_perc_df = pd.DataFrame(trunc_samp_2_perc_dict)
+trunc_samp_2_perc_df
        
