@@ -64,11 +64,11 @@ def summarize(csv_content):
                         ignore_index=True)  # replaced int(topicNumber) with str(topicNumber)
                 else:
                     break
-        reviewTopicsDataframe.columns = ['Dominant-Topoic', 'Contribution-Percentage', 'Keywords']
+        reviewTopicsDataframe.columns = ['Dominant_Topic', 'Contribution_Percentage', 'Keywords']
         # Add original text to the end of the output
         originalDataframe = pd.DataFrame(cleaned_data[['review', '3gram_reviews']])
         reviewTopicsDataframe = pd.concat([reviewTopicsDataframe, originalDataframe], axis=1)
-        return (reviewTopicsDataframe)
+        return reviewTopicsDataframe
 
 
     reviewTopicsDf = identifyReviewTopics()
