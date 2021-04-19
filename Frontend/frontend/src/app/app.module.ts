@@ -10,6 +10,7 @@ import { UploadpageComponent } from './uploadpage/uploadpage.component';
 import { RegisterpageComponent } from './registerpage/registerpage.component';
 import { GamelibraryComponent } from './gamelibrary/gamelibrary.component';
 import { HomepageComponent } from './homepage/homepage.component';
+import { HovermeComponent } from './hoverme/hoverme.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HomepageComponent } from './homepage/homepage.component';
     UploadpageComponent,
     RegisterpageComponent,
     GamelibraryComponent,
-    HomepageComponent
+    HomepageComponent,
+    HovermeComponent
   ],
   imports: [
     BrowserModule,
