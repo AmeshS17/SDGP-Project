@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Page</title>
+   
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@800&display=swap" rel="stylesheet">
+     <!-- Bootstrap -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <script src="../../assets/js/lightbox.js"></script>
+    <style>
+
+      *{
+      box-sizing: border-box;
+}
+     
+
+    body {background-color: black;}
+    input[type=text] {
+    border: 1px solid #ccc;  
+  }
+
+  .container-fluid{
+    margin-bottom: 5%;
+  }
+
+  .container {
+    margin-bottom: 9%;
+  }
+  
+    </style>
+</head>
+<body>
+  
+
+  <div class="container" >
+    <div class="row">
+      <div class="col-sm-4 style=background-color: #000;">
+        <img src ="assets/images/person.png" style="width: 400px; height: auto ;">
+      </div>
+      <div class="col-sm-8 style=background-color: #000;">
+        <div class="container mt-3" style="top: 100%; bottom:20%;">
+          <form>
+            <div class="form-group">
+              <label for="gameName" style= "color: aliceblue;" >Game Name</label>
+              <input id="gameName "type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="description" style= "color: aliceblue;">Game Description</label>
+              <textarea name="" id="description" cols="30" rows="10" class="form-control">
+              </textarea>
+            </div>
+            <div class="form-group">
+              <label for="uploadGame" style= "color: aliceblue;">Upload your file:</label>
+              <Ngx-CSVtoJSON (onConvert)="convert($event)" (onFail)="onError($event)"></Ngx-CSVtoJSON>
+            </div>
+            <div>
+              {{convertedObj}}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        
+          <img id="myImg" src="https://media.geeksforgeeks.org/wp-content/uploads/geeksforgeeks-6.png" alt="Snow" style="width:100%;max-width:300px">
+           
+        </div>
+      </div>
+    
+    </div>
+  </div>
+
+  
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+</div>
+
+  
+  <div class="footer-basic">
+    <footer>
+        <div class="social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-linkedin"></i></a>
+          <a href="#"><i class="fa fa-instagram"></i></a></div>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#">Home</a></li>
+            <li class="list-inline-item"><a href="#">Services</a></li>
+            <li class="list-inline-item"><a href="#">About</a></li>
+            <li class="list-inline-item"><a href="#">Terms</a></li>
+            <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+        </ul>
+        <p class="copyright">GameJury ©️ 2018</p>
+    </footer>
+</div>
+      
+      
+
+</body>
+</html>

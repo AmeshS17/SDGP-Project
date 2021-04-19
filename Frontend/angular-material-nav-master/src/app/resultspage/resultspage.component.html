@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@800&display=swap" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Home</title>
+  </head>  
+  <body>
+    
+
+    <div class='content'>
+      <div class='info-row'>
+        <div [style.content]="imageUrl" class="gameimage"></div>
+
+        <div class = 'gameheading'>
+          <h2>{{title|titlecase}}</h2>
+          <h3>Game Description</h3>
+          <p>{{desc|lowercase}}</p>
+        </div>
+      </div>
+
+      <div class='charts-container'>
+        <div class ='summary-container'>
+          <p class='chartbox-header'>Summary</p>
+          <canvas id="summary-chart"></canvas>
+        </div>
+        <div class="detailed-charts-container">
+          <p class='chartbox-header'>Detailed</p>
+          <div class='pie-group-container'>
+            <div class="pie-container">
+              <p class='pie-header'>Gameplay Mechanics</p>
+              <canvas id="gameplay-chart"></canvas>
+            </div>
+            <div class="pie-container">
+              <p class='pie-header'>Network Performance</p>
+              <canvas id="network-chart"></canvas>
+            </div>
+            <div class="pie-container">
+              <p class='pie-header'>Content/Value</p>
+              <canvas id="content-chart"></canvas>
+            </div>
+            <div class="pie-container">
+              <p class='pie-header'>Overall Experience</p>
+              <canvas id="overall-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-basic">
+      <footer>
+          <div class="social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-instagram"></i></a></div>
+          <ul class="list-inline">
+              <li class="list-inline-item"><a href="#">Home</a></li>
+              <li class="list-inline-item"><a href="#">Services</a></li>
+              <li class="list-inline-item"><a href="#">About</a></li>
+              <li class="list-inline-item"><a href="#">Terms</a></li>
+              <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+          </ul>
+          <p class="copyright">GameJury ©️ 2018</p>
+        </footer>
+      </div>
+  </body>
+</html>
