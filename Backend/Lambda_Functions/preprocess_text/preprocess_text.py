@@ -333,8 +333,6 @@ def preprocess_data(review_data):
 
     data_frame_raw['author.playtime_forever'] = data_frame_raw['author.playtime_forever'] / 60
 
-    data_frame_raw['author.playtime_last_two_weeks'] = data_frame_raw['author.playtime_last_two_weeks'] / 60
-
     data_frame_raw['review_length'] = data_frame_raw['review'].map(lambda x: len(x.split()))
 
     data_frame_raw_num = data_frame_raw.select_dtypes(exclude=['O', 'bool'])
