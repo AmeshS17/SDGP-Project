@@ -6,15 +6,9 @@ import io
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import pandas as pd
-import spacy
 import gensim
-from gensim.models import LdaMulticore
-from gensim.parsing.preprocessing import STOPWORDS
 from gensim import corpora
 from gensim.models import LdaMulticore
-import bbcode
-import json
-import re
 import string
 
 s3 = boto3.client('s3')
@@ -22,23 +16,86 @@ s3 = boto3.client('s3')
 def get_csv(bucket,key):
     
     csv_object = s3.get_object(Bucket=bucket, Key=key)
-    csv_content = csv_object['Body'].read().decode('utf-8').split('\n')
+    csv_content = io.StringIO(csv_object['Body'].read().decode('utf-8'))
     
-    csv_dict = list(csv.DictReader(csv_content))
-    
-    print(csv_dict[:15])
-    print("Data dictionary length : " + str(len(csv_dict)))
-    
-    return csv_dict
+    return csv_content
 
 
 def put_json(csv_dict,bucket,key):
-    sample_dict = csv_dict[:5]
+    #sample_dict = csv_dict[:5]
     
-    response = s3.put_object(Body=json.dumps(sample_dict).encode('utf-8'),Bucket=bucket,Key=key)
+    response = s3.put_object(Body=json.dumps(csv_dict).encode('utf-8'),Bucket=bucket,Key=key)
 
     print(response)
     return True
+
+
+def summarize(csv_content):
+
+    cleaned_data = pd.read_csv(csv_content, index_col=0, nrows=1000)
+    cleaned_data['3gram_reviews'] = cleaned_data['3gram_reviews'].map(
+        lambda x: ''.join(c for c in x if c == '_' or c not in string.punctuation).split())
+    lda_model = LdaMulticore.load('model.model')
+    documents = list(cleaned_data['3gram_reviews'])
+    dictionary = gensim.corpora.Dictionary(documents)
+    dictionary_saved = gensim.corpora.Dictionary.load('model.model.id2word')
+    corpus = [dictionary_saved.doc2bow(text) for text in documents]
+
+    topicDictionary = {'0': 'Network Performance',
+                        '1': 'Overall Experience',
+                        '2': 'Gameplay Mechanics',
+                        '3': 'Content/Value', 
+                        '4': 'NO TOPIC',
+                    }
+
+
+    def identifyReviewTopics(ldamodel=lda_model, corpus=corpus, documents=documents):
+        reviewTopicsDataframe = pd.DataFrame()
+        # Get main topic in each document
+        for i, row in enumerate(ldamodel[corpus]):
+            row = sorted(row, key=lambda x: (x[1]), reverse=True)
+            # Get the Dominant topic, Perc Contribution and Keywords for each document
+            for j, (topicNumber, prop_topic) in enumerate(row):
+                if j == 0:  
+                    wp = ldamodel.show_topic(topicNumber)
+                    topicKeywords = ", ".join([word for word, prop in wp])
+                    reviewTopicsDataframe = reviewTopicsDataframe.append(
+                        pd.Series([topicDictionary[str(topicNumber)], round(prop_topic, 4), topicKeywords]),
+                        ignore_index=True)  # replaced int(topicNumber) with str(topicNumber)
+                else:
+                    break
+        reviewTopicsDataframe.columns = ['Dominant-Topoic', 'Contribution-Percentage', 'Keywords']
+        # Add original text to the end of the output
+        originalDataframe = pd.DataFrame(cleaned_data[['review', '3gram_reviews']])
+        reviewTopicsDataframe = pd.concat([reviewTopicsDataframe, originalDataframe], axis=1)
+        return (reviewTopicsDataframe)
+
+
+    reviewTopicsDf = identifyReviewTopics()
+    sentAnalyzer = SentimentIntensityAnalyzer()
+    reviewTopicsDf['compound_sentiment'] = reviewTopicsDf['review'].map(lambda x: sentAnalyzer.polarity_scores(x)['compound'])
+    sentimentDictionary = {}
+
+    for topic in list(topicDictionary.values()):
+        isCurrentTopic = reviewTopicsDf['Dominant_Topic'] == topic
+        topicDf = reviewTopicsDf[isCurrentTopic]
+        sentimentList = topicDf['compound_sentiment']
+        positiveList = [x for x in sentimentList if x > 0.1]
+        negativeList = [x for x in sentimentList if x < -0.1]
+        neutralList = [x for x in sentimentList if x not in positiveList and x not in negativeList]
+        totalList = len(sentimentList)
+        print(topic)
+        print(totalList)
+        if (totalList > 0):
+            positivePercentage = len(positiveList) / totalList
+            neutralPercentage = len(neutralList) / totalList
+            negativePercentage = len(negativeList) / totalList
+            sentimentDictionary[topic] = [round(positivePercentage, 3), round(neutralPercentage, 3), round(negativePercentage, 3)]
+            # output percentages as positive, neutral, then negative
+    print("\nBy review\n", sentimentDictionary)
+
+
+    return sentiment_dictionary
 
 
 def lambda_handler(event, context):
@@ -61,11 +118,12 @@ def lambda_handler(event, context):
     )
     
     try:
-        data_dict = get_csv(get_bucket,get_key)
+        csv_content = get_csv(get_bucket,get_key)
         
+        sentiment_dictionary = summarize(csv_content)
         
         put_key = get_key[:-3] + 'json'
-        uploaded = put_json(data_dict,put_bucket,put_key)
+        uploaded = put_json(sentiment_dictionary,put_bucket,put_key)
         
         waiter.wait(
         Bucket=put_bucket,
