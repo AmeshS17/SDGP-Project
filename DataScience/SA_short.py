@@ -29,4 +29,33 @@ topicDictionary = {'0': 'Network Performance',
                    '4': 'NO TOPIC',
                    }
 
+def identifyReviewTopics(ldamodel=lda_model, corpus=corpus, documents=documents):
+    reviewTopicsDataframe = pd.DataFrame()
+    #Taking the main topics in each documents
+    for i, row in enumerate(ldamodel[corpus]):
+        row = sorted(row, key=lambda x: (x[1]), reverse=True)
+        #Taking the dominant topic, perc contribution and keywords for each documnet
+        for j, (topicNumber, prop_topic) in enumerate(row):
+            # Getting dominant topic
+            if j == 0:  
+                wp = ldamodel.show_topic(topicNumber)
+                topicKeywords = ", ".join([word for word, prop in wp])
+                # replaced int(topicNumber) with
+                reviewTopicsDataframe = reviewTopicsDataframe.append(
+                    pd.Series([topicDictionary[str(topicNumber)], round(prop_topic, 4), topicKeywords]),
+                    ignore_index=True)  
+            else:
+                break
+    reviewTopicsDataframe.columns = ['Dominant-Topoic', 'Contribution-Percentage', 'Keywords']
+    # Adding the original text to the ouput of the document
+    originalDataframe = pd.DataFrame(cleaned_data[['review', '3gram_reviews']])
+    # docs = pd.Series(documents)
+    reviewTopicsDataframe = pd.concat([reviewTopicsDataframe, originalDataframe], axis=1)
+    return (reviewTopicsDataframe)
+
+reviewTopicsDf = identifyReviewTopics()
+sentAnalyzer = SentimentIntensityAnalyzer()
+reviewTopicsDf['compound_sentiment'] = reviewTopicsDf['review'].map(lambda x: sentAnalyzer.polarity_scores(x)['compound'])
+reviewTopicsDf.to_csv('C:/Users/Downloads/32323.csv')
+sentimentDictionary = {}
 
