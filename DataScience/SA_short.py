@@ -40,7 +40,7 @@ def identifyReviewTopics(ldamodel=lda_model, corpus=corpus, documents=documents)
             if j == 0:  
                 wp = ldamodel.show_topic(topicNumber)
                 topicKeywords = ", ".join([word for word, prop in wp])
-                # replaced int(topicNumber) with
+                # replaced int(topicNumber) with str(topicNumber)
                 reviewTopicsDataframe = reviewTopicsDataframe.append(
                     pd.Series([topicDictionary[str(topicNumber)], round(prop_topic, 4), topicKeywords]),
                     ignore_index=True)  
