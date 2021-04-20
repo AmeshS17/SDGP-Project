@@ -129,8 +129,7 @@ trunc_samp_2_perc_dict = {'num_tokens': [], 'correct': [], 'wrong': [], 'total':
 # calculate the number of correct classifications for each unique token count
 for i in trunc_unique_num_tokens:
     try:
-        token_correct = \
-            trunc_samp_2_df[(trunc_samp_2_df['num_tokens'] == i)]['count'][trunc_samp_2_df['correct'] == 1].reset_index(
+        token_correct = trunc_samp_2_df[(trunc_samp_2_df['num_tokens'] == i)]['count'][trunc_samp_2_df['correct'] == 1].reset_index(
                 drop=True)[0]
 
     except IndexError:
