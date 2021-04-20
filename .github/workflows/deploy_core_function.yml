@@ -215,8 +215,7 @@ jobs:
         run: python "./Backend/Tests/test_upload_session/test_upload_session.py"
 
   test_search_session:
-    if: ${{ false }}
-    needs: [deploy_model,deploy_preprocessor,deploy_retriever,deploy_url_generator,deploy_async_model_trigger,deploy_game_listing]
+    needs: [deploy_model,deploy_preprocessor,deploy_retriever,deploy_url_generator,deploy_async_model_trigger,deploy_game_listing,test_upload_session]
     name: Test run a search session
     
     # The type of runner that the job will run on
