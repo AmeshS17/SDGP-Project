@@ -22,11 +22,11 @@ def upload_file(upload_url,file_path):
 
 
 def get_summary(base_url,file_key):
-    for i in range(6):
+    for i in range(60):
         response = requests.get(base_url+"results?filekey="+file_key)
         lambda_status_code = int(response.status_code)
         if lambda_status_code == 204:
-            time.sleep((i+1)*5)
+            time.sleep(5)
             continue
         if lambda_status_code == 200:
             print ('get_summary passed')
