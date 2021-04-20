@@ -42,5 +42,5 @@ for game in game_list:
 
 invoke_model(base_url,test_file_key)
 summary = get_summary(base_url,test_file_key)
-print(summary)
+
         
