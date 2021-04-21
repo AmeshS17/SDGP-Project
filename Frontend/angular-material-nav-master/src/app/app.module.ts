@@ -33,7 +33,7 @@ import {NgxCSVtoJSONModule} from 'ngx-csvto-json';
     MatTabsModule,
     AppRoutingModule,
     NgxCSVtoJSONModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     {
