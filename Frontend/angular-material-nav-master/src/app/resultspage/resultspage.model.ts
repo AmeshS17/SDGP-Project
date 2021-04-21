@@ -1,5 +1,5 @@
 export interface Results {
-    Network_Performance: number[];
+    Performance: number[];
     Overall_Experience: number[];
     Gameplay_Mechanics: number[]; 
     Content_Value: number[];
