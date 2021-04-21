@@ -10,3 +10,5 @@ export class AppComponent {
   title = 'app';
   angularVersion: string = ngv.full;
 }
+
+

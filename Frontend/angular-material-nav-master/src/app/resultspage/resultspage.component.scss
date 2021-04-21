@@ -9,6 +9,9 @@
   width: 30%;
   display: inline-block;
   border-radius: 5px;
+  min-height: 10%;
+  // max-height: 20%;
+  height: 20%;
 }
 
 .gameheading {
@@ -19,7 +22,7 @@
   max-width: 60%;
   text-overflow: ellipsis;
   overflow: hidden;
-  max-height: 40ch;
+  max-height: 30ch;
 }
 
 .info-row {

@@ -11,14 +11,17 @@ import {Results} from './resultspage.model';
 })
 export class ResultspageComponent implements OnInit {
 
+  id: number = 1;
   title: string = 'test title';
   desc: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis, nulla eget interdum euismod, velit ante bibendum lectus, ac ullamcorper quam erat sit amet orci. Duis facilisis, est non maximus ultrices, velit leo efficitur erat, id lobortis turpis tortor eget mi. Aenean id convallis dolor. Curabitur et purus ut nisi luctus auctor sit amet non nisi. Morbi placerat eget risus at volutpat. Aliquam mattis ultrices odio tempor lacinia. Suspendisse convallis velit sit amet imperdiet tempor. Praesent venenatis dignissim massa, at posuere urna commodo a. Curabitur in efficitur nisl. Nam vitae egestas diam, at dignissim lacus. Nunc suscipit velit vel accumsan pellentesque. Aliquam dolor nisl, congue et tincidunt et, posuere et nulla. Phasellus volutpat orci et molestie egestas. Sed quis rhoncus dolor. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna.';
   filekey: string = 'testfile.json';
-  imageUrl: string = "url(/assets/images/teken7.jpg)" ;
+  // imageUrl: string = "url(/assets/images/image "+this.id.toString+".jpg )";
+  imageName:string = "image"+this.id.toString()+".jpg";
+  imageUrl: string = "url(/assets/images/"+this.imageName+")" ;
   tries: number = 0;
   loaded: boolean = false;
   attempts: number = 0;
-  
+
 
   homeSlider={items: 1, dots: true, nav: true};
 
@@ -38,12 +41,12 @@ export class ResultspageComponent implements OnInit {
           let body = {...data.body}
           this.loaded = true;
           this.generateSummaryChart(body);
-          
+
         }
         else if (statuscode == 204 && this.attempts < 5){
           (async () => {
             console.log('File not found');
-            await this.delay(5000);  
+            await this.delay(5000);
             this.getResults();
           })();
         }
