@@ -41,11 +41,11 @@ def summarize(csv_content):
     dictionary_saved = gensim.corpora.Dictionary.load('model.model.id2word')
     corpus = [dictionary_saved.doc2bow(text) for text in documents]
 
-    topicDictionary = {'0': 'Network Performance',
-                        '1': 'Overall Experience',
-                        '2': 'Gameplay Mechanics',
-                        '3': 'Content/Value', 
-                        '4': 'NO TOPIC',
+    topicDictionary = {'0': 'Performance',
+                        '1': 'Overall_Experience',
+                        '2': 'Gameplay_Mechanics',
+                        '3': 'Content_Value', 
+                        '4': 'NO_TOPIC',
                     }
 
 
