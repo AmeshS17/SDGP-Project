@@ -1,6 +1,6 @@
 .game-card-container {
-  max-width: 90%;
-  margin: 0% 5%;
+  max-width: 87%;
+  margin: 0% 6.5%;
 }
 
 .game-card {
@@ -10,15 +10,15 @@
 .mat-card {
   width: 500px;
   background-color: #16161dad;
-  border-radius: 5%;
+  border-radius: 15px;
   margin: 20px;
   height: 500px;
 }
 
 img {
-  margin: 5% 0% 0% 13%;
-  padding: 12% 0% 0% 0%;
-  width: 75%;
+  margin: 5% 0%;
+  padding: 10% 0% 0% 0%;
+  width: 100%;
 }
 
 button {
@@ -26,15 +26,17 @@ button {
 }
 
 mat-card-header {
-  margin: 0% 0% 0% 15%;
-  padding: 5% 0% 0% 8%;
+  margin: 0% 5%;
+  width: 90%;
   text-align: center;
   color: aliceblue;
+  justify-content: center;
 }
 
 mat-card-actions {
-  margin: 0% 0% 0% 22%;
-  padding: 0% 0% 0% 15%;
+  width: fit-content;
+  margin: auto;
+  justify-content: center;
   color: aliceblue;
 }
 

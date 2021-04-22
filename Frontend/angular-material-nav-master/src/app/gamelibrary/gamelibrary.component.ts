@@ -1,6 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { game } from './gamelibrary.model';
 import { GamelibraryService } from './gamelibrary.service';
 
@@ -11,13 +12,17 @@ import { GamelibraryService } from './gamelibrary.service';
 })
 export class GamelibraryComponent implements OnInit {
 
-  games = [];
+  games: game[] = [];
+  selectedGame: game; 
 
-  constructor(private GamelibraryService: GamelibraryService) { }
+  constructor(private GamelibraryService: GamelibraryService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.getGames();
   }
+
+
 
   getGames(){
     this.GamelibraryService.getGames().subscribe(
@@ -37,7 +42,27 @@ export class GamelibraryComponent implements OnInit {
       (data: HttpResponse<string>) =>{
         console.log(data)
         console.log(data.status)
+        if(data.status == 200){
+          this.router.navigateByUrl('/resultspage', {
+            state:{
+              data:{
+                title: this.selectedGame.title,
+                desc: this.selectedGame.desc,
+                filekey: this.selectedGame.filekey,
+                id: this.selectedGame.id
+              }
+            }
+          })
+        }
       }
     );
+  }
+
+  selectGame(game: game){
+    if(this.selectedGame == undefined){
+      this.selectedGame = game;
+      console.log(this.selectedGame)
+      this.triggerModel(this.selectedGame.filekey);
+    }
   }
 }
