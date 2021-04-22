@@ -11,22 +11,31 @@ import {Results} from './resultspage.model';
 })
 export class ResultspageComponent implements OnInit {
 
-  id: number = 1;
-  title: string = 'test title';
-  desc: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc convallis, nulla eget interdum euismod, velit ante bibendum lectus, ac ullamcorper quam erat sit amet orci. Duis facilisis, est non maximus ultrices, velit leo efficitur erat, id lobortis turpis tortor eget mi. Aenean id convallis dolor. Curabitur et purus ut nisi luctus auctor sit amet non nisi. Morbi placerat eget risus at volutpat. Aliquam mattis ultrices odio tempor lacinia. Suspendisse convallis velit sit amet imperdiet tempor. Praesent venenatis dignissim massa, at posuere urna commodo a. Curabitur in efficitur nisl. Nam vitae egestas diam, at dignissim lacus. Nunc suscipit velit vel accumsan pellentesque. Aliquam dolor nisl, congue et tincidunt et, posuere et nulla. Phasellus volutpat orci et molestie egestas. Sed quis rhoncus dolor. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Sed interdum, enim non pellentesque posuere, est risus luctus augue, eget cursus orci magna at lectus. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna. Cras ut lorem sollicitudin, accumsan ex ut, luctus urna.';
-  filekey: string = 'testfile.json';
-  // imageUrl: string = "url(/assets/images/image "+this.id.toString+".jpg )";
+  id: number = 0;
+  title: string = '';
+  desc: string = '';
+  filekey: string = '';
   imageName:string = "image"+this.id.toString()+".jpg";
-  imageUrl: string = "url(/assets/images/"+this.imageName+")" ;
+  imageUrl: string = "url(/assets/images/"+this.imageName+")";
   tries: number = 0;
   loaded: boolean = false;
   attempts: number = 0;
-  
-
-
-  homeSlider={items: 1, dots: true, nav: true};
 
   constructor(private ResultsService: ResultspageService) { }
+
+  ngOnInit(){
+    Chart.register(...registerables);
+
+    let stateData = window.history.state.data;
+    this.title = stateData.title;
+    this.id = stateData.id;
+    this.desc = stateData.desc;
+    this.filekey = stateData.filekey;
+    this.imageName = "image"+this.id.toString()+".jpg";
+    this.imageUrl = "url(/assets/images/"+this.imageName+")";
+
+    this.getResults();
+  }
 
   delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
@@ -37,46 +46,46 @@ export class ResultspageComponent implements OnInit {
       (data: HttpResponse<Results>) => {
         this.attempts++;
         let statuscode = data.status
-        if (statuscode == 200 && this.attempts < 5) {
-          console.log(data.status)
-          let body = {...data.body}
-          this.loaded = true;
-          this.generateSummaryChart(body);
-
+        if(this.attempts < 30){
+          if (statuscode == 200) {
+            console.log('Summary received on attempt - ' + this.attempts);
+            console.log(data.status);
+            let body = {...data.body}
+            this.loaded = true;
+            this.generateSummaryChart(body);
+          }
+          else if (statuscode == 204 ){
+            (async () => {
+              console.log('File not found');
+              await this.delay(10000);
+              this.getResults();
+            })();
+          }
         }
-        else if (statuscode == 204 && this.attempts < 5){
-          (async () => {
-            console.log('File not found');
-            await this.delay(5000);
-            this.getResults();
-          })();
+        if(this.attempts >= 30){
+          console.log('Maximum Attempts reached');
         }
         console.log(data);
       });
   };
 
-  ngOnInit(){
-    Chart.register(...registerables);
-    this.getResults();
-  }
 
   generateSummaryChart(data: Results | any){
-
     let posDataset =[
                       data['Gameplay_Mechanics'][0]*100,
-                      data['Network_Performance'][0]*100,
+                      data['Performance'][0]*100,
                       data['Content_Value'][0]*100,
                       data['Overall_Experience'][0]*100
                     ]
     let negDataset =[
                       data['Gameplay_Mechanics'][2]*100,
-                      data['Network_Performance'][2]*100,
+                      data['Performance'][2]*100,
                       data['Content_Value'][2]*100,
                       data['Overall_Experience'][2]*100
                     ]
     let neutralDataset =[
                           data['Gameplay_Mechanics'][1]*100,
-                          data['Network_Performance'][1]*100,
+                          data['Performance'][1]*100,
                           data['Content_Value'][1]*100,
                           data['Overall_Experience'][1]*100
                         ]
@@ -84,7 +93,7 @@ export class ResultspageComponent implements OnInit {
     var summaryChart = new Chart('summary-chart', {
       type: 'bar',
       data: {
-        labels:['Gameplay Mechanics','Network Performance','Content/Value','Overall Experience'],
+        labels:['Gameplay Mechanics','Performance','Content/Value','Overall Experience'],
         datasets:[
           {
             label:'Positive',
@@ -150,8 +159,8 @@ export class ResultspageComponent implements OnInit {
         labels:['Positive','Neutral','Negative'],
         datasets:[
           {
-            label:'Network Performance',
-            data: data['Network_Performance'],
+            label:'Performance',
+            data: data['Performance'],
             backgroundColor: ['blue','yellow','red']
           }
         ]

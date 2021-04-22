@@ -6,6 +6,3 @@ export interface Results {
     NO_TOPIC: number[];
 }
 
-
-
-

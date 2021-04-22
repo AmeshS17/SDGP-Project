@@ -10,8 +10,6 @@ import { API_URL } from '../../api_url';
   providedIn: 'root'
 })
 
-
-
 export class UploadpageService {
 
   private baseurl = API_URL + '/upload-url';
@@ -25,15 +23,11 @@ export class UploadpageService {
   }
 
   uploadFile(file:File, uploadurl:string): Observable<boolean> {
-    const httpOptions = {
-      headers: new HttpHeaders({
+    const headers = new HttpHeaders({
         'Content-Type': 'text/csv'
       })
-    }
-    const formData: FormData = new FormData();
-    formData.append('fileKey', file, file.name);
     return this.http
-      .put(uploadurl, formData, httpOptions)
+      .put(uploadurl, file, { headers } )
       .pipe(map(() => {return true; }));
 }
 }

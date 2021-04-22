@@ -50,23 +50,23 @@
       </div>
       <div class="col-sm-8 style=background-color: #000;">
         <div class="container mt-3" style="top: 100%; bottom:20%;">
-          <form>
+          
             <div class="form-group">
               <label for="gameName" style= "color: aliceblue;" >Game Name</label>
-              <input id="gameName "type="text" class="form-control">
+              <input id="gameName "type="text" class="form-control" (change)="setTitle($event)">
             </div>
             <div class="form-group">
               <label for="description" style= "color: aliceblue;">Game Description</label>
-              <textarea name="" id="description" cols="30" rows="10" class="form-control">
-              </textarea>
+              <textarea name="" id="description" cols="30" rows="10" class="form-control" (change)="setDesc($event)"></textarea>
             </div>
             <div class="form-group">
               <label for="uploadGame" style= "color: aliceblue;">Upload your file:</label>
-              <input class="ng-hide" id="input-file-id" multiple type="file" accept=".csv" />
-              <label for="input-file-id" class="md-button md-raised md-primary"></label>
+              <input type="file" #fileUpload name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+               id="fileSelect" style= "color: aliceblue;" (click)="fileUpload.value = null" (change)="importFile($event)">
             </div>
-            <button mat-raised-button color="primary" style="background-color: blue;">Submit</button>
-          </form>
+            <button mat-raised-button color="primary" style="background-color: blue;" (click)="uploadFileToActivity();">Submit</button>
+            <span class="warning_text" style="color: red;" >{{warning}}</span>
+        
         
           
           <div class="Instructions">
@@ -74,7 +74,9 @@
             <ul>
               <li>Create a CSV file with the necessary column headings and enter all the required data.
               </li>
-
+              <li>
+                The first row has been filled out as an example, please follow the same pattern.
+              </li>
               <li>
                 A minimum of 5000 entires and no more than 10,000 entires are required for the model to display adequate results.
               </li>

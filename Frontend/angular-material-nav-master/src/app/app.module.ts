@@ -15,7 +15,6 @@ import { GamelibraryComponent } from './gamelibrary/gamelibrary.component';
 import { ResultspageComponent } from './resultspage/resultspage.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HttpClientModule } from '@angular/common/http';
-import {NgxCSVtoJSONModule} from 'ngx-csvto-json';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import {NgxCSVtoJSONModule} from 'ngx-csvto-json';
     FlexLayoutModule,
     MatTabsModule,
     AppRoutingModule,
-    NgxCSVtoJSONModule,
     HttpClientModule,
   ],
   providers: [
