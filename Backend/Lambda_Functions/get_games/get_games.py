@@ -11,7 +11,7 @@ table = dynamodb.Table('games')
 
 def get_game_list(table):
     scan_kwargs = {
-        'ProjectionExpression': "id, title, #description,filekey",
+        'ProjectionExpression': "id, title, #description,filekey,developer,release_year",
         'ExpressionAttributeNames': {"#description": "desc"}
     }
 
