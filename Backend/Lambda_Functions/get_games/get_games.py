@@ -34,7 +34,8 @@ def lambda_handler(event, context):
     response = get_game_list(table)
     for game in response:
         game_id = int(game['id'])
-        update_dict = {"id":game_id}
+        release_year = int(game['release_year'])
+        update_dict = {"id":game_id,"release_year":release_year}
         game.update(update_dict)
     
     return {
