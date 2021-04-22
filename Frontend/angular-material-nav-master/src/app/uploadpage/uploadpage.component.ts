@@ -9,8 +9,11 @@ import {url_response} from './uploadpage.model';
 })
 export class UploadpageComponent implements OnInit {
 
+  id: number = 0;
+  title: string = 'testtitle'
+  desc: string = 'gamedescription'
   uploadurl : string = 'null';
-  filekey : string = 'null';
+  filekey : string = 'testfile';
   url_response : url_response = {uploadurl : 'null' , filekey : 'null'};
   fileToUpload: File;
 

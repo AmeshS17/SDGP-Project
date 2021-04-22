@@ -1,19 +1,45 @@
-.grid-container {
-  display: grid;
-  grid-gap: 50px;
-  grid-template-columns: auto auto auto;
-  padding: 20px;
+.game-card-container {
+  max-width: 90%;
+  margin: 0% 5%;
 }
 
-.grid-item {
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
+.game-card {
+  display: inline-block;
+}
+
+.mat-card {
+  width: 500px;
+  background-color: #16161dad;
+  border-radius: 5%;
+  margin: 20px;
+  height: 500px;
 }
 
 img {
-  width: 500px;
-  border-radius: 5%;
+  margin: 5% 0% 0% 13%;
+  padding: 12% 0% 0% 0%;
+  width: 75%;
+}
+
+button {
+  background-color: #1463a6;
+}
+
+mat-card-header {
+  margin: 0% 0% 0% 15%;
+  padding: 5% 0% 0% 8%;
+  text-align: center;
+  color: aliceblue;
+}
+
+mat-card-actions {
+  margin: 0% 0% 0% 22%;
+  padding: 0% 0% 0% 15%;
+  color: aliceblue;
+}
+
+mat-card-subtitle {
+  color: aliceblue;
 }
 
 h2 {

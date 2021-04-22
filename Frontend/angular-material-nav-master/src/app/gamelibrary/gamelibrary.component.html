@@ -17,10 +17,31 @@
     <!-- Add icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title>Home</title>
+    <title>Game Library</title>
     </head>
     
       <body>
+        <div class="game-card-container">
+            <div class="game-card" *ngFor="let game of games">
+        <mat-card >
+            <img mat-card-image src="assets/images/image{{game.id}}.jpg">
+            <mat-card-header>
+                <mat-card-title>{{game.title}}</mat-card-title>
+                <mat-card-subtitle>Developer: {{game.developer}}</mat-card-subtitle>
+                <mat-card-subtitle>Release Date: {{game.release_year}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-actions>
+              <button mat-button>View</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+          </div>
+
+          
+
+          
+
+          
   
 
   <!-- <div class="grid-container">

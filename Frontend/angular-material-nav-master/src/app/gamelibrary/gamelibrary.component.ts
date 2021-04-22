@@ -1,4 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
+import { templateJitUrl } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { game } from './gamelibrary.model';
 import { GamelibraryService } from './gamelibrary.service';
@@ -10,6 +11,8 @@ import { GamelibraryService } from './gamelibrary.service';
 })
 export class GamelibraryComponent implements OnInit {
 
+  games = [];
+
   constructor(private GamelibraryService: GamelibraryService) { }
 
   ngOnInit(): void {
@@ -19,8 +22,12 @@ export class GamelibraryComponent implements OnInit {
   getGames(){
     this.GamelibraryService.getGames().subscribe(
       (data: game[]) => {
-        console.log(data)
-        this.triggerModel("brawlhalla.json");
+        let tempgames = data;
+        tempgames = tempgames.filter(function(obj){
+          return obj.id !== 0;
+        })
+        console.log(tempgames)
+        this.games = tempgames
       }
     )
   }

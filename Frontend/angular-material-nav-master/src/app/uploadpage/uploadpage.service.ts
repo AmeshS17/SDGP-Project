@@ -11,9 +11,7 @@ import { API_URL } from '../../api_url';
 })
 
 
-export class ConfigService {
-  
-}
+
 export class UploadpageService {
 
   private baseurl = API_URL + '/upload-url';

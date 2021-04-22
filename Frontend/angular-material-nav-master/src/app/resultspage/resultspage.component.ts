@@ -21,6 +21,7 @@ export class ResultspageComponent implements OnInit {
   tries: number = 0;
   loaded: boolean = false;
   attempts: number = 0;
+  
 
 
   homeSlider={items: 1, dots: true, nav: true};
