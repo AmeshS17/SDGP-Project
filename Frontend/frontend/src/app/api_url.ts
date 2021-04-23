@@ -1,1 +1,0 @@
-export const API_URL= 'https://8k7ni4cse1.execute-api.us-west-2.amazonaws.com/github-deploy-test'
