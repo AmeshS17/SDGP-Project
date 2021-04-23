@@ -65,7 +65,7 @@
                id="fileSelect" style= "color: aliceblue;" (click)="fileUpload.value = null" (change)="importFile($event)">
             </div>
             <button mat-raised-button color="primary" style="background-color: blue;" (click)="uploadFileToActivity();">Submit</button>
-            <span class="warning_text" style="color: red;" >{{warning}}</span>
+            <span class="warning_text" [style.color]="warningColor" >{{warning}}</span>
         
         
           

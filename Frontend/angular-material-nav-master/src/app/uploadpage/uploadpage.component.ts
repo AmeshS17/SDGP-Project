@@ -19,6 +19,7 @@ export class UploadpageComponent implements OnInit {
   fileToUpload: File;
   warning: string = ''
   validSubmission: boolean = false;
+  warningColor: string = 'red'
 
   constructor( private UploadService : UploadpageService, 
                 private router: Router) { }
@@ -46,9 +47,12 @@ export class UploadpageComponent implements OnInit {
     this.validateSubmission();
 
     if(this.validSubmission){
+      this.warningColor = 'green';
+      this.warning = 'Uploading';
       this.UploadService.uploadFile(this.fileToUpload,this.uploadurl).subscribe(
         (data: boolean) => {
-          console.log(data)
+          
+          console.log(data);
           if (data){
             this.router.navigateByUrl('/resultspage', {
               state:{
@@ -65,6 +69,8 @@ export class UploadpageComponent implements OnInit {
           }
         }, error => {
           console.log(error);
+          this.warningColor = 'red';
+          this.warning = 'Upload failed. Please refresh the page'
         });
     }
   }
